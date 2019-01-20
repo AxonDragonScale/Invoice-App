@@ -35,6 +35,7 @@ module.exports = {
                     id INTEGER PRIMARY KEY,
                     name TEXT,
                     price INTEGER,
+                    invoice_id INTEGER,
                     FOREIGN KEY(invoice_id) REFERENCES invoices(id)
                 )`);
 
