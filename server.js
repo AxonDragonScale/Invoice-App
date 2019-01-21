@@ -98,8 +98,59 @@ app.post('/login', function (req, res) {
         } else {
             return res.json({
                 status: false,
-                message: "Password is Incorrect"
+                message: "Password is Incorrect, Please retry."
             });
         }
+    });
+});
+
+
+
+// setting up the /invoice route
+// handles invoice creation
+app.post('/invoice', function (req, res) {
+    if (isEmpty(req.body.name)) {
+        return res.json({
+            status: false,
+            message: "name field for invoice not found."
+        });
+    } else if (isEmpty(req.body.user_id)) {
+        return res.json({
+            status: false,
+            message: "user_id field for invoice not found."
+        });
+    }
+
+    let db = new sqlite.Database('./database/InvoiceApp.db');
+    let paid = 0;
+    for(let i = 0; i<req.body.txn_prices.length; i++) {
+        paid = paid + parseInt(req.body.txn_prices[i]);
+    }
+    let sql = `INSERT INTO invoices(name, user_id, paid) VALUES('${req.body.name}','${req.body.user_id}','${paid}')`;
+
+    db.serialize(function () {
+        db.run(sql, function (err) {
+            if (err) {
+                throw err;
+            }
+
+            let invoice_id = this.lastID;
+            for (let i = 0; i < req.body.txn_names.length; i++) {
+                let query = `INSERT INTO transactions(name, price, invoice_id) VALUES('${req.body.txn_names[i]}','${req.body.txn_prices[i]}','${invoice_id}')`;
+                db.run(query, function(err) {
+                    if(err) {
+                        return res.json({
+                            status: false,
+                            message: "Error creating invoice."
+                        });
+                    }
+                });                    
+            }
+
+            return res.json({
+                status: true,
+                message: "Invoice created successfully."
+            });
+        });
     });
 });
