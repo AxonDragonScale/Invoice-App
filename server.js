@@ -154,3 +154,24 @@ app.post('/invoice', function (req, res) {
         });
     });
 });
+
+
+
+
+// route for fetching all invoices of a user
+app.get("/invoice/user/:user_id", function(req, res) {
+    let db = new sqlite.Database("./database/InvoiceApp.db");
+    let sql = `SELECT * FROM invoices LEFT JOIN transactions on invoices.id=transactions.invoice_id WHERE user_id='${req.params.user_id}'`;
+
+    db.all(sql, [], (err, rows) => {
+        if(err) {
+            throw err;
+        }
+        console.log(rows);
+
+        return res.json({
+            status: true,
+            transactions: rows
+        });
+    });
+});
