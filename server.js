@@ -159,6 +159,7 @@ app.post('/invoice', function (req, res) {
 
 
 // route for fetching all invoices of a user
+// ex - localhost:8000/invoice/user/2   ->   this gives req.params.user_id = 2
 app.get("/invoice/user/:user_id", function(req, res) {
     let db = new sqlite.Database("./database/InvoiceApp.db");
     let sql = `SELECT * FROM invoices LEFT JOIN transactions on invoices.id=transactions.invoice_id WHERE user_id='${req.params.user_id}'`;
@@ -168,6 +169,24 @@ app.get("/invoice/user/:user_id", function(req, res) {
             throw err;
         }
         console.log(rows);
+
+        return res.json({
+            status: true,
+            transactions: rows
+        });
+    });
+});
+
+
+
+// route for fetching a specific invoice
+app.get("/invoice/user/:user_id/invoice/:invoice_id", function(req, res) {
+    let db = new sqlite.Database("./database/InvoiceApp.db");
+    let sql = `SELECT * FROM invoices LEFT JOIN transactions ON invoices.id=transactions.invoice_id WHERE user_id='${req.params.user_id}' AND invoice_id='${req.params.invoice_id}'`;
+    db.all(sql, [], (err, rows) => {
+        if(err) {
+            throw err;
+        }
 
         return res.json({
             status: true,
