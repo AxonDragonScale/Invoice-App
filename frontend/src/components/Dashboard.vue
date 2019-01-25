@@ -1,35 +1,34 @@
 <script>
-
 import Header from "./Header";
 import CreateInvoice from "./CreateInvoice";
-import ViewInvoice from "./ViewInvoice";
+import ViewInvoices from "./ViewInvoices";
 
 export default {
-    name: "Dashboard";
-    components: {
-        Header,
-        CreateInvoice,
-        ViewInvoice
-    },
+  name: "Dashboard",
+  components: {
+    Header,
+    CreateInvoice,
+    ViewInvoices
+  },
 
-    data() {
-        return {
-            isactive: 'create',
-            title: "Invoice App",
-            user: (this.$route.params.user) ? this.$route.params.user : null
-        };
-    }
+  data() {
+    return {
+      isactive: "create",
+      title: "Invoice App",
+      user: this.$route.params.user ? this.$route.params.user : null
+    };
+  }
 };
 </script>
 
 <template>
-    <div class="container-fluid" style="padding: 0px;">
-        <Header v-bind:user="user"></Header>
-        <template v-if="this.isactive == 'create'">
-            <CreateInvoice></CreateInvoice>
-        </template>
-        <template v-else>
-            <ViewInvoice></ViewInvoice>
-        </template>
-    </div>
+  <div class="container-fluid" style="padding: 0px;">
+    <Header v-bind:user="user"></Header>
+    <template v-if="this.isactive == 'create'">
+      <CreateInvoice></CreateInvoice>
+    </template>
+    <template v-else>
+      <ViewInvoices></ViewInvoices>
+    </template>
+  </div>
 </template>

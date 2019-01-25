@@ -10,7 +10,7 @@ const app = express();
 // use middleware that parses urlencoded bodies, false - use querystring library instead of qs library
 app.use(bodyparser.urlencoded({ extended: false }));
 app.use(bodyparser.json());     // use json parser middleware
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 8128;
 
 // create a simple '/' route 
 // routes HTTP GET request to '/' and calls the fucntion specified
@@ -123,7 +123,7 @@ app.post('/invoice', function (req, res) {
 
     let db = new sqlite.Database('./database/InvoiceApp.db');
     let paid = 0;
-    for(let i = 0; i<req.body.txn_prices.length; i++) {
+    for (let i = 0; i < req.body.txn_prices.length; i++) {
         paid = paid + parseInt(req.body.txn_prices[i]);
     }
     let sql = `INSERT INTO invoices(name, user_id, paid) VALUES('${req.body.name}','${req.body.user_id}','${paid}')`;
@@ -137,14 +137,14 @@ app.post('/invoice', function (req, res) {
             let invoice_id = this.lastID;
             for (let i = 0; i < req.body.txn_names.length; i++) {
                 let query = `INSERT INTO transactions(name, price, invoice_id) VALUES('${req.body.txn_names[i]}','${req.body.txn_prices[i]}','${invoice_id}')`;
-                db.run(query, function(err) {
-                    if(err) {
+                db.run(query, function (err) {
+                    if (err) {
                         return res.json({
                             status: false,
                             message: "Error creating invoice."
                         });
                     }
-                });                    
+                });
             }
 
             return res.json({
@@ -159,13 +159,13 @@ app.post('/invoice', function (req, res) {
 
 
 // route for fetching all invoices of a user
-// ex - localhost:8000/invoice/user/2   ->   this gives req.params.user_id = 2
-app.get("/invoice/user/:user_id", function(req, res) {
+// ex - localhost:8128/invoice/user/2   ->   this gives req.params.user_id = 2
+app.get("/invoice/user/:user_id", function (req, res) {
     let db = new sqlite.Database("./database/InvoiceApp.db");
     let sql = `SELECT * FROM invoices LEFT JOIN transactions on invoices.id=transactions.invoice_id WHERE user_id='${req.params.user_id}'`;
 
     db.all(sql, [], (err, rows) => {
-        if(err) {
+        if (err) {
             throw err;
         }
         console.log(rows);
@@ -180,11 +180,11 @@ app.get("/invoice/user/:user_id", function(req, res) {
 
 
 // route for fetching a specific invoice
-app.get("/invoice/user/:user_id/invoice/:invoice_id", function(req, res) {
+app.get("/invoice/user/:user_id/invoice/:invoice_id", function (req, res) {
     let db = new sqlite.Database("./database/InvoiceApp.db");
     let sql = `SELECT * FROM invoices LEFT JOIN transactions ON invoices.id=transactions.invoice_id WHERE user_id='${req.params.user_id}' AND invoice_id='${req.params.invoice_id}'`;
     db.all(sql, [], (err, rows) => {
-        if(err) {
+        if (err) {
             throw err;
         }
 
