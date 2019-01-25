@@ -42,7 +42,7 @@ export default {
         formData.append("company_name", this.model.company_name);
         formData.append("password", this.model.password);
 
-        this.loading = "Registering you, please wait";
+        this.loading = "   Registering you, please wait";
         // post to server
         axios.post("http://localhost:8128/register", formData).then(res => {
           this.loading = "";
@@ -67,7 +67,7 @@ export default {
       formData.append("email", this.model.email);
       formData.append("password", this.model.password);
 
-      this.loading = "Signing in";
+      this.loading = "   Signing in";
 
       // post to server
       axios.post("http://localhost:8128/login", formData).then(res => {
@@ -91,13 +91,28 @@ export default {
 
 <template>
   <div class="container">
-
     <ul class="nav nav-pills nav-fill mb-3" id="pills-tab" role="tablist">
       <li class="nav-item">
-        <a class="nav-link active" id="pills-login-tab" data-toggle="pill" href="#pills-login" role="tab" aria-controls="pills-upload" aria-selected="true"> Login </a>
+        <a
+          class="nav-link active"
+          id="pills-login-tab"
+          data-toggle="pill"
+          href="#pills-login"
+          role="tab"
+          aria-controls="pills-upload"
+          aria-selected="true"
+        >Login</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" id="pills-register-tab" data-toggle="pill" href="#pills-register" role="tab" aria-controls="pills-verify" aria-selected="false"> Register </a>
+        <a
+          class="nav-link"
+          id="pills-register-tab"
+          data-toggle="pill"
+          href="#pills-register"
+          role="tab"
+          aria-controls="pills-verify"
+          aria-selected="false"
+        >Register</a>
       </li>
     </ul>
 

@@ -168,7 +168,6 @@ app.get("/invoice/user/:user_id", function (req, res) {
         if (err) {
             throw err;
         }
-        console.log(rows);
 
         return res.json({
             status: true,
